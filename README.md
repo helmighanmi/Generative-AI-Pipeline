@@ -78,4 +78,4 @@ Take your **QA_bot.png** screenshot from this UI.
 ---
 
 ## 📜 License
-MIT License © 2025
+Free
