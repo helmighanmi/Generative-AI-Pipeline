@@ -1,0 +1,13 @@
+boto3
+botocore
+tabula-py
+faiss-cpu
+pymupdf
+requests
+langchain-aws
+langchain-text-splitters
+numpy
+tqdm
+PyYAML
+ipython
+jupyter

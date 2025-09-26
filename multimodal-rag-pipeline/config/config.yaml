@@ -1,0 +1,25 @@
+model:
+  text_encoder: "sentence-transformers/all-MiniLM-L6-v2"
+  image_encoder: "openai/clip-vit-base-patch32"
+  llm_provider: "openai"
+  llm_model: "gpt-4"
+  embedding_dim: 384
+  bedrock:
+    embedding_model_id: "amazon.titan-embed-image-v1"
+    llm_model_id: "amazon.nova-pro-v1:0"
+
+retriever:
+  type: "faiss"
+  top_k: 5
+
+data:
+  input_dir: "data"
+  processed_dir: "data/processed"
+
+pipeline:
+  batch_size: 16
+  use_gpu: true
+
+vectorstore:
+  index_path: "data/faiss_index.index"
+  metadata_path: "data/faiss_metadata.json"
