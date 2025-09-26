@@ -1,7 +1,7 @@
 # 🧠 RAG + QA Bot with LangChain (Open Source)
 
 This project demonstrates how to build a **Retrieval-Augmented Generation (RAG)** pipeline 
-and a **QA bot** using **LangChain**, **Chroma**, **Hugging Face embeddings**, 
+and a **QA bot** using **LangChain**, **ChromadB**, **Hugging Face embeddings**, 
 and open-source LLMs.
 
 ---
