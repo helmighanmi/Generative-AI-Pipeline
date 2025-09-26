@@ -1,4 +1,4 @@
-# 🤖 Generative-ai-applications
+# 🤖 generative-ai-applications
 
 This repository is a collection of **Generative AI experiments and pipelines**, with a focus on **RAG (Retrieval-Augmented Generation)** and **LangChain**.  
 It is organized into multiple sub-projects, each exploring a different approach.
@@ -52,7 +52,7 @@ Supports conversational interaction over indexed documents.
 Clone the repo:
 
 ```bash
-git clone https://github.com/helmighanmi/Generative-ai-applications.git
+git clone https://github.com/helmighanmi/generative-ai-applications.git
 cd Generative-ai-applications
 ```
 
