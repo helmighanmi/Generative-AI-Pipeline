@@ -1,4 +1,4 @@
-# 🤖 Generative AI Pipeline
+# 🤖 Generative-ai-applications
 
 This repository is a collection of **Generative AI experiments and pipelines**, with a focus on **RAG (Retrieval-Augmented Generation)** and **LangChain**.  
 It is organized into multiple sub-projects, each exploring a different approach.
@@ -8,7 +8,7 @@ It is organized into multiple sub-projects, each exploring a different approach.
 ## 📂 Repository Structure
 
 ```
-Generative-AI-Pipeline/
+Generative-ai-applications/
 ├── langchain/                  # LangChain examples and utilities
 ├── multimodal-rag-pipeline/    # Demo: multimodal RAG (PDFs with text, tables, images)
 ├── rag-qa-bot-langchain/       # Q&A bot powered by LangChain + RAG
@@ -52,8 +52,8 @@ Supports conversational interaction over indexed documents.
 Clone the repo:
 
 ```bash
-git clone https://github.com/helmighanmi/Generative-AI-Pipeline.git
-cd Generative-AI-Pipeline
+git clone https://github.com/helmighanmi/Generative-ai-applications.git
+cd Generative-ai-applications
 ```
 
 Each sub-project has its own `requirements.txt`.  
