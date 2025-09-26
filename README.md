@@ -12,7 +12,7 @@ Generative-ai-applications/
 ├── langchain/                  # LangChain examples and utilities
 ├── multimodal-rag-pipeline/    # Demo: multimodal RAG (PDFs with text, tables, images)
 ├── rag-qa-bot-langchain/       # Q&A bot powered by LangChain + RAG
-└── README.md                   # This file
+└── README.md                   
 ```
 
 ---
@@ -94,9 +94,8 @@ AWS_DEFAULT_REGION= # us-east-1 or else
 ---
 
 ## 👤 Author
-
-**Helmi Ghanmi**  
+```bash
+Firstname: Helmi 
+Name: Ghanmi
 Data Scientist
 📅 2025-09-26
-
----
