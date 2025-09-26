@@ -1,40 +1,17 @@
-import json
-from langchain_aws import ChatBedrock
+"""
+Author: GHANMI Helmi
+Date: 2025-09-26
+Position: Data-Science
+"""
 
-def invoke_nova_multimodal(prompt, matched_items):
-    system_msg = [
-        {"text": "You are a helpful assistant for question answering. "
-                 "The text context is relevant information retrieved. "
-                 "The provided image(s) are relevant information retrieved."}
-    ]
+from src.embedding import EmbeddingService
+from src.vectorstore import FaissVectorStore
+from src.generator import GeneratorService
 
-    message_content = []
+def retrieve(store:FaissVectorStore, query:str, top_k:int=5):
+    emb = EmbeddingService().embed(text=query)
+    return store.search(emb, top_k=top_k)
 
-    for item in matched_items:
-        if item['type'] in ['text', 'table']:
-            message_content.append({"text": item['text']})
-        else:
-            message_content.append({"image": {
-                "format": "png",
-                "source": {"bytes": item['image']},
-            }})
-
-    inf_params = {"max_new_tokens": 300, "top_p": 0.9, "top_k": 20}
-
-    message_list = [
-        {"role": "user", "content": message_content}
-    ]
-
-    message_list.append({"role": "user", "content": [{"text": prompt}]})
-
-    native_request = {
-        "messages": message_list,
-        "system": system_msg,
-        "inferenceConfig": inf_params,
-    }
-
-    model_id = "amazon.nova-pro-v1:0"
-    client = ChatBedrock(model_id=model_id)
-
-    response = client.invoke(json.dumps(native_request))
-    return response.content
+def rag_ask(store:FaissVectorStore, question:str, top_k:int=5) -> str:
+    ctx = retrieve(store, question, top_k=top_k)
+    return GeneratorService().generate(question, ctx)

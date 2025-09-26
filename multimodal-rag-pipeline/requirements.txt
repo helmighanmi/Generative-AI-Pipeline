@@ -1,13 +1,32 @@
-boto3
-botocore
-tabula-py
-faiss-cpu
-pymupdf
-requests
-langchain-aws
-langchain-text-splitters
+# ---------------------------------------------------------
+# Author: GHNAMI Helmi
+# Date: 2025-09-26
+# Position: Data-Science
+# ---------------------------------------------------------
+
+# Core
 numpy
 tqdm
-PyYAML
-ipython
+pyyaml
+requests
+
+# PDF & data extraction
+pymupdf
+tabula-py
+pillow
+
+# Embeddings & LLMs
+faiss-cpu
+sentence-transformers
+transformers
+openai
+
+# Text splitting
+langchain-text-splitters
+
+# Dev & Testing
+pytest
+flake8
+
+# Notebook environment
 jupyter

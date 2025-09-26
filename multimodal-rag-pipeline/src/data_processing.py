@@ -1,17 +1,10 @@
 """
-Author: GHNAMI Helmi
+Author: GHANMI Helmi
 Date: 2025-09-26
 Position: Data-Science
 """
 
-import os
-import json
-import base64
-import requests
-import logging
-import warnings
-import tabula
-import pymupdf
+import os, json, base64, requests, logging, warnings, tabula, pymupdf
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 warnings.filterwarnings("ignore")
@@ -27,51 +20,43 @@ def download_pdf(url: str, save_dir: str, filename: str) -> str:
             f.write(response.content)
         print(f"File downloaded successfully: {filepath}")
     else:
-        raise RuntimeError(f"Failed to download file from {url} (status code {response.status_code})")
+        raise RuntimeError(f"Failed to download {url} (status {response.status_code})")
     return filepath
 
 def create_directories(base_dir: str):
-    directories = ["images", "text", "tables", "page_images"]
-    for dir_name in directories:
-        os.makedirs(os.path.join(base_dir, dir_name), exist_ok=True)
+    for d in ["images","text","tables","page_images"]:
+        os.makedirs(os.path.join(base_dir,d), exist_ok=True)
 
-def process_tables(filepath: str, doc, page_num: int, base_dir: str, items: list):
+def process_tables(filepath, doc, page_num, base_dir, items):
     try:
-        tables = tabula.read_pdf(filepath, pages=page_num + 1, multiple_tables=True)
-        if not tables:
-            return
-        for table_idx, table in enumerate(tables):
-            table_text = "\n".join([" | ".join(map(str, row)) for row in table.values])
-            table_file_name = f"{base_dir}/tables/{os.path.basename(filepath)}_table_{page_num}_{table_idx}.txt"
-            with open(table_file_name, 'w') as f:
-                f.write(table_text)
-            items.append({"page": page_num, "type": "table", "text": table_text, "path": table_file_name})
+        tables = tabula.read_pdf(filepath, pages=page_num+1, multiple_tables=True)
+        if not tables: return
+        for t_idx, table in enumerate(tables):
+            table_text = "\n".join([" | ".join(map(str,row)) for row in table.values])
+            out = f"{base_dir}/tables/{os.path.basename(filepath)}_table_{page_num}_{t_idx}.txt"
+            with open(out,'w') as f: f.write(table_text)
+            items.append({"page":page_num,"type":"table","text":table_text,"path":out})
     except Exception as e:
-        logger.error(f"Error extracting tables from page {page_num}: {str(e)}")
+        logger.error(f"Error extracting tables on page {page_num}: {e}")
 
-def process_text_chunks(text: str, text_splitter, page_num: int, base_dir: str, items: list):
-    chunks = text_splitter.split_text(text)
-    for i, chunk in enumerate(chunks):
-        text_file_name = f"{base_dir}/text/{os.path.basename(text_splitter.filepath)}_text_{page_num}_{i}.txt"
-        with open(text_file_name, 'w') as f:
-            f.write(chunk)
-        items.append({"page": page_num, "type": "text", "text": chunk, "path": text_file_name})
+def process_text_chunks(filepath, text, splitter, page_num, base_dir, items):
+    chunks = splitter.split_text(text)
+    for i,chunk in enumerate(chunks):
+        out = f"{base_dir}/text/{os.path.basename(filepath)}_text_{page_num}_{i}.txt"
+        with open(out,'w') as f: f.write(chunk)
+        items.append({"page":page_num,"type":"text","text":chunk,"path":out})
 
-def process_images(doc, page, page_num: int, base_dir: str, items: list):
-    images = page.get_images()
-    for idx, image in enumerate(images):
-        xref = image[0]
-        pix = pymupdf.Pixmap(doc, xref)
-        image_name = f"{base_dir}/images/{os.path.basename(doc.name)}_image_{page_num}_{idx}_{xref}.png"
-        pix.save(image_name)
-        with open(image_name, 'rb') as f:
-            encoded_image = base64.b64encode(f.read()).decode('utf8')
-        items.append({"page": page_num, "type": "image", "path": image_name, "image": encoded_image})
+def process_images(doc, page, page_num, base_dir, items):
+    for idx,img in enumerate(page.get_images()):
+        xref = img[0]; pix = pymupdf.Pixmap(doc,xref)
+        name = f"{base_dir}/images/{os.path.basename(doc.name)}_img_{page_num}_{idx}_{xref}.png"
+        pix.save(name)
+        with open(name,'rb') as f: encoded = base64.b64encode(f.read()).decode("utf8")
+        items.append({"page":page_num,"type":"image","path":name,"image":encoded})
 
-def process_page_images(page, page_num: int, base_dir: str, items: list):
+def process_page_images(page, page_num, base_dir, items):
     pix = page.get_pixmap()
-    page_path = os.path.join(base_dir, f"page_images/page_{page_num:03d}.png")
-    pix.save(page_path)
-    with open(page_path, 'rb') as f:
-        page_image = base64.b64encode(f.read()).decode('utf8')
-    items.append({"page": page_num, "type": "page", "path": page_path, "image": page_image})
+    path = os.path.join(base_dir,f"page_images/page_{page_num:03d}.png")
+    pix.save(path)
+    with open(path,'rb') as f: encoded = base64.b64encode(f.read()).decode("utf8")
+    items.append({"page":page_num,"type":"page","path":path,"image":encoded})

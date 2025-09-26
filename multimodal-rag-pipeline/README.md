@@ -1,47 +1,126 @@
-# multimodal-rag-pipeline
+# 📘 Multimodal RAG Demo
 
-This project implements a Retrieval-Augmented Generation (RAG) pipeline using multimodal inputs (text, tables, images) extracted from PDFs.  
-It leverages Amazon Bedrock models (Titan for embeddings, Nova for generation) and FAISS for vector similarity search.
+This repository contains a **demo implementation of a Retrieval-Augmented Generation (RAG) pipeline** for a **single PDF**.  
+It extracts **text, tables, and images** from the document, generates embeddings, stores them in a FAISS vector store, and allows you to **query the document** using natural language.
 
-## Features
+---
 
-- PDF data extraction (text, tables, images, page snapshots)
-- Amazon Titan Multimodal Embeddings for unified embedding generation
-- FAISS vector store for similarity search
-- Amazon Nova model for RAG question answering with multimodal context
-- Configurable via YAML file
-- Dockerized environment
-- CI/CD pipeline via GitHub Actions
+## 🚀 Features
 
-## Setup
+- PDF ingestion (`pymupdf` + `tabula`)  
+- Extracts:
+  - Text chunks
+  - Tables
+  - Page-level images
+  - Inline images
+- Embedding generation (configurable: OpenAI, HuggingFace, Stub)  
+- Vector store built with FAISS  
+- Query support with top-k retrieval  
+- Full RAG: retrieve + generate answer  
 
-1. Clone the repo:
+---
+
+## 📂 Structure
+
+```
+multimodal_rag_pipeline/
+├── src/
+│   ├── config.py
+│   ├── data_processing.py
+│   ├── embedding.py
+│   ├── generator.py
+│   ├── rag.py
+│   ├── vectorstore.py
+│   └── __init__.py
+├── config/
+│   └── config.yaml
+├── main.py
+├── dynamic_rag_full_demo.ipynb
+├── requirements.txt
+├── Dockerfile
+├── .env
+└── README.md
+```
+
+---
+
+## ⚙️ Installation
 
 ```bash
-git clone https://github.com/yourusername/multimodal-rag-pipeline.git
-cd multimodal-rag-pipeline
-
-Install dependencies:
-
+git clone https://github.com/<your-username>/multimodal_rag_pipeline.git
+cd multimodal_rag_pipeline
 pip install -r requirements.txt
+```
 
+---
 
-Configure AWS credentials for boto3 (needed for Amazon Bedrock access).
+## 🖥️ Usage
 
-Run the demo notebook:
+### CLI
 
-jupyter notebook notebooks/demo_multimodal_rag.ipynb
+```bash
+# Step 1: Build FAISS index from the demo PDF
+python main.py build
 
-Usage
+# Step 2: Query contexts
+python main.py query "Which optimizer was used for training?"
 
-Modify the config file in config/config.yaml to customize the pipeline, input directories, and model parameters.
+# Step 3: Full RAG (retrieve + generate)
+python main.py ask "Which optimizer was used for training?"
+```
 
-Docker
+### Notebook
 
-Build and run Docker container:
+Run the interactive notebook:
 
-docker build -t multimodal-rag-pipeline .
-docker run -p 8888:8888 multimodal-rag-pipeline
+```bash
+jupyter lab dynamic_rag_full_demo.ipynb
+```
 
+---
 
-Access Jupyter notebook at http://localhost:8888
+## 🐳 Run with Docker
+
+You can also build and run the pipeline in a container.
+
+### Build the image
+
+```bash
+docker build -t multimodal-rag .
+```
+
+### Run Jupyter Lab inside the container
+
+```bash
+docker run -p 8888:8888 multimodal-rag
+```
+
+➡️ Then open [http://localhost:8888](http://localhost:8888) in your browser.  
+By default, the container launches Jupyter Lab with no token or password.
+
+### Run CLI inside the container
+
+```bash
+# Build index inside Docker
+docker run multimodal-rag python main.py build
+
+# Query inside Docker
+docker run multimodal-rag python main.py query --text "Which optimizer was used for training?"
+
+# Full RAG ask inside Docker
+docker run multimodal-rag python main.py ask --text "Which optimizer was used for training?"
+```
+
+---
+
+## 🔑 Notes
+
+- This is a **demo version** → it only processes **one PDF** at a time.  
+- Embeddings and generation depend on provider settings in `config/config.yaml`.  
+- API keys (OpenAI, HuggingFace, AWS) should be stored in `.env`.  
+- If you need secrets in Docker, pass them as environment variables:
+  ```bash
+  docker run -e OPENAI_API_KEY=your_key multimodal-rag python main.py ask --text "..."
+  ```
+
+---

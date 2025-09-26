@@ -1,25 +1,35 @@
 model:
-  text_encoder: "sentence-transformers/all-MiniLM-L6-v2"
+  embedding:
+    provider: "huggingface"    # Options: openai | huggingface | bedrock | stub
+    model_id: "sentence-transformers/all-MiniLM-L6-v2"
+    dim: 384
+
   image_encoder: "openai/clip-vit-base-patch32"
-  llm_provider: "openai"
-  llm_model: "gpt-4"
-  embedding_dim: 384
-  bedrock:
-    embedding_model_id: "amazon.titan-embed-image-v1"
-    llm_model_id: "amazon.nova-pro-v1:0"
+
+  llm:
+    provider: "openai"         # Options: openai | huggingface | bedrock | stub
+    model_id: "gpt-4"
+    temperature: 0.3
+    max_tokens: 512
 
 retriever:
-  type: "faiss"
   top_k: 5
+  similarity_metric: "l2"
 
 data:
-  input_dir: "data"
-  processed_dir: "data/processed"
-
-pipeline:
-  batch_size: 16
-  use_gpu: true
+  input_dir: "data/input"
+  output_dir: "data/output"
+  persist_dir: "data/index"
 
 vectorstore:
-  index_path: "data/faiss_index.index"
-  metadata_path: "data/faiss_metadata.json"
+  type: "faiss"
+  index_path: "data/index/faiss.index"
+  metadata_path: "data/index/metadata.json"
+
+pipeline:
+  chunk_size: 500
+  chunk_overlap: 50
+  use_page_images: true
+  use_tables: true
+  use_text: true
+  use_images: true
