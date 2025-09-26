@@ -88,15 +88,15 @@ OPENAI_API_KEY=your_openai_api_key
 HUGGINGFACE_HUB_TOKEN=your_hf_token
 AWS_ACCESS_KEY_ID=your_aws_key
 AWS_SECRET_ACCESS_KEY=your_aws_secret
-AWS_DEFAULT_REGION=us-east-1
+AWS_DEFAULT_REGION= # us-east-1 or else
 ```
 
 ---
 
 ## 👤 Author
 
-**Helmi Ghnami**  
-_Data Scientist | Generative AI | RAG Systems_  
+**Helmi Ghanmi**  
+Data Scientist
 📅 2025-09-26
 
 ---
