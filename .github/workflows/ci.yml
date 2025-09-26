@@ -53,7 +53,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ghcr.io/${{ github.repository }}:latest .
+        run: docker build -t ghcr.io/helmighanmi/generative-ai-applications/multimodal-rag-pipeline:latest -f multimodal-rag-pipeline/Dockerfile multimodal-rag-pipeline
 
       - name: Push Docker image
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: docker push ghcr.io/helmighanmi/generative-ai-applications/multimodal-rag-pipeline:latest
